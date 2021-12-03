@@ -96,7 +96,11 @@ class ParametersBag implements Collection
      */
     public function get_integer(string $key)
     {
-        return (int) preg_replace("/[^0-9]+/", '', $this->get($key, ''));
+        return (int) preg_replace(
+            "/[^0-9]+/",
+            '',
+            $this->get($key, '')
+        );
     }
 
 

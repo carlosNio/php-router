@@ -157,12 +157,15 @@ class Router
             // after that call the closure
             call_user_func_array($action, $args);
         } elseif (is_array($action)) {
-            // extract the controller and method
-            list($controller, $method) = $action;
-            // get the method required parameters
-            $args = $this->methodArgs($controller, $method, $params ?? null);
-            // after that call the controller method
-            call_user_func_array([$controller, $method], $args);
+
+            if (count($action) > 0) {
+                // extract the controller and method
+                list($controller, $method) = $action;
+                // get the method required parameters
+                $args = $this->methodArgs($controller, $method, $params ?? null);
+                // after that call the controller method
+                call_user_func_array([$controller, $method], $args);
+            }
         }
 
         exit;
