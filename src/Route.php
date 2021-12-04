@@ -93,7 +93,17 @@ final class Route
      */
     public static function put(string $route, $action, array $where = [])
     {
-        self::register('pur', $route, $action, $where);
+        self::register('put', $route, $action, $where);
+    }
+
+    /**
+     * register a new PATCH route
+     * 
+     * @return void
+     */
+    public static function patch(string $route, $action, array $where = [])
+    {
+        self::register('patch', $route, $action, $where);
     }
 
 
@@ -115,7 +125,7 @@ final class Route
      */
     public static function any(string $route, $action, array $where = [])
     {
-        $methods = ['get', 'head', 'post', 'put', 'delete'];
+        $methods = ['get', 'head', 'post', 'put' , 'patch', 'delete'];
         foreach ($methods as $method) {
             self::register($method, $route, $action, $where);
         }
@@ -134,4 +144,33 @@ final class Route
         }
     }
     
+
+    
+    /** 
+     * register a REST resource
+     * 
+     * 
+     * @return void
+     */
+
+    public function resource(string $name, string $classname, bool $auth = false, $level = null)
+    {
+        //index
+        $this->match(['get', 'head'], "/{$name}", [$classname, 'index']);
+        //store
+        $this->post("/{$name}", [$classname, 'store']);
+        //create
+        $this->match(['get', 'head'], "/{$name}/create", [$classname, 'create']);
+        //show
+        $this->get("/{$name}/{id}", [$classname, 'show'] , ['id' => 'uuid']);
+        $this->head("/{$name}/{id}", [$classname, 'show'], ['id' => 'uuid']);
+        //edit        
+        $this->get("/{$name}/{id}/edit", [$classname, 'edit'], ['id' => 'uuid']);
+        $this->head("/{$name}/{id}/edit", [$classname, 'edit'], ['id' => 'uuid']);
+        //update
+        $this->put("/{$name}/{id}", [$classname, 'update'], ['id' => 'uuid']);
+        $this->patch("/{$name}/{id}", [$classname, 'update'], ['id' => 'uuid']);
+        //destroy
+        $this->delete("/{$name}/{id}", [$classname, 'destroy'], ['id' => 'uuid']);
+    }
 }
