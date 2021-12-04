@@ -161,8 +161,9 @@ class Router
             if (count($action) > 0) {
                 // extract the controller and method
                 list($controller, $method) = $action;
+                $controller = new $controller;
                 // get the method required parameters
-                $args = $this->methodArgs($controller, $method, $params ?? null);
+                $args = $this->methodArgs($controller, $method, $params ?? []);
                 // after that call the controller method
                 call_user_func_array([$controller, $method], $args);
             }
@@ -209,7 +210,7 @@ class Router
         $r = $route;
         $this->opcional = false;
 
-        if (preg_match_all("/(\{[a-zA-Z0-9\?]+\})/", $route, $matches)) {
+        if (preg_match_all("/(\ {[a-zA-Z0-9\?]+\})/", $route, $matches)) {
             // parameters types
             $types = Route::getParametersType()[$route] ?? '';
 

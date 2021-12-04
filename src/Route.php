@@ -4,7 +4,7 @@ namespace Nio\Router;
 
 final class Route
 {
-    private static $map;
+    private $map;
     private static $types;
 
     /**
@@ -12,12 +12,12 @@ final class Route
      * 
      * @return void
      */
-    private static function register(string $method, string $route, $action, $where)
+    private function register(string $method, string $route, $action, $where)
     {
-        self::$map[$method][$route] = $action;
+       $this->map[$method][$route] = $action;
 
         if (!empty($where)) {
-            self::$types[$route] = $where;
+           self::$types[$route] = $where;
         }
     }
 
@@ -26,9 +26,9 @@ final class Route
      * 
      * @return array
      */
-    public static function getRoutes()
+    public function getRoutes()
     {
-        return self::$map ?? [];
+        return $this->map ?? [];
     }
 
 
@@ -58,9 +58,9 @@ final class Route
      * 
      * @return void
      */
-    public static function get(string $route, $action, array $where = [])
+    public function get(string $route, $action, array $where = [])
     {
-        self::register('get', $route, $action, $where);
+        $this->register('get', $route, $action, $where);
     }
 
 
@@ -69,9 +69,9 @@ final class Route
      * 
      * @return void
      */
-    public static function head(string $route, $action, array $where = [])
+    public function head(string $route, $action, array $where = [])
     {
-        self::register('head', $route, $action, $where);
+        $this->register('head', $route, $action, $where);
     }
 
 
@@ -80,9 +80,9 @@ final class Route
      * 
      * @return void
      */
-    public static function post(string $route, $action, array $where = [])
+    public function post(string $route, $action, array $where = [])
     {
-        self::register('post', $route, $action, $where);
+        $this->register('post', $route, $action, $where);
     }
 
 
@@ -91,9 +91,9 @@ final class Route
      * 
      * @return void
      */
-    public static function put(string $route, $action, array $where = [])
+    public function put(string $route, $action, array $where = [])
     {
-        self::register('put', $route, $action, $where);
+        $this->register('put', $route, $action, $where);
     }
 
     /**
@@ -101,9 +101,9 @@ final class Route
      * 
      * @return void
      */
-    public static function patch(string $route, $action, array $where = [])
+    public function patch(string $route, $action, array $where = [])
     {
-        self::register('patch', $route, $action, $where);
+        $this->register('patch', $route, $action, $where);
     }
 
 
@@ -112,9 +112,9 @@ final class Route
      * 
      * @return void
      */
-    public static function delete(string $route, $action, array $where = [])
+    public function delete(string $route, $action, array $where = [])
     {
-        self::register('delete', $route, $action, $where);
+        $this->register('delete', $route, $action, $where);
     }
 
 
@@ -123,11 +123,11 @@ final class Route
      * 
      * @return void
      */
-    public static function any(string $route, $action, array $where = [])
+    public function any(string $route, $action, array $where = [])
     {
         $methods = ['get', 'head', 'post', 'put' , 'patch', 'delete'];
         foreach ($methods as $method) {
-            self::register($method, $route, $action, $where);
+            $this->register($method, $route, $action, $where);
         }
     }
 
@@ -137,10 +137,10 @@ final class Route
      * 
      * @return void
      */
-    public static function match(array $methods, string $route, $action, array $where = [])
+    public function match(array $methods, string $route, $action, array $where = [])
     {
         foreach ($methods as $method) {
-            self::register($method, $route, $action, $where);
+            $this->register($method, $route, $action, $where);
         }
     }
     
@@ -153,7 +153,7 @@ final class Route
      * @return void
      */
 
-    public function resource(string $name, string $classname, bool $auth = false, $level = null)
+    public function resource(string $name, string $classname)
     {
         //index
         $this->match(['get', 'head'], "/{$name}", [$classname, 'index']);
