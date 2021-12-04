@@ -20,7 +20,13 @@ class Request
         $this->uri = $server['REQUEST_URI'];
         $this->host = $server['HTTP_HOST'];
 
-        $this->params = new ParametersBag(array_merge($_POST, $_GET, $_FILES));
+        $this->params = new ParametersBag(
+            array_merge(
+                $_POST,
+                $_GET,
+                $_FILES
+            )
+        );
         $this->headers = $this->getHeaders($server);
     }
 
@@ -36,7 +42,7 @@ class Request
         foreach ($server as $key => $value) {
             if (strpos($key, 'HTTP_') === 0) {
                 $name = strtolower(substr($key, 5));
-                $name = str_replace("_" , "-" , $name);
+                $name = str_replace("_", "-", $name);
                 $headers[$name] = $value;
             }
         }
@@ -90,7 +96,7 @@ class Request
      * @return HeadersBag
      */
 
-    public function headers() : HeadersBag
+    public function headers(): HeadersBag
     {
         return $this->headers;
     }
